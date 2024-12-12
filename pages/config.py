@@ -41,3 +41,17 @@ for secret, display in secrets.items():
         if st.button("Appliquer", key=secret):
             change_secret(secret, val_secret)
             st.rerun()
+
+col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
+    with col1:
+        # Initialise le modèle sélectionné s'il n'existe pas dans l'état de la session
+        if "model" not in st.session_state:
+            st.session_state["model"] = ""
+        # Récupère la liste des modèles disponibles auprès d'Ollama
+        models = [model["model"] for model in client.list()["models"]]
+        # Permet à l'utilisateur de choisir un modèle dans la liste
+        model = st.selectbox("Choisissez votre modèle", models)
+    with col2:
+        if st.button("Appliquer", key='model'):
+            st.session_state["model"] = model
+            st.rerun()
