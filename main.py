@@ -28,8 +28,8 @@ if check_variables():
     os.environ["PINECONE_API_KEY"] = st.secrets['pinecone_api_key']
     
     # Initialise l'historique des messages s'il n'existe pas dans l'état de la session
-        if "messages" not in st.session_state:
-            st.session_state["messages"] = []
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = []
     
     client = Client(host=st.secrets['url_llm'])
 
