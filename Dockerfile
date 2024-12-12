@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copie du fichier de lancement
+WORKDIR /app
 RUN git clone https://github.com/Doberloose/chatbot.git .
 
 # Mise à jour de pip3
