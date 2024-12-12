@@ -7,23 +7,13 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
+# Copie du fichier de lancement
+RUN git clone https://github.com/streamlit/streamlit-example.git .
 
 # Mise à jour de pip3
 RUN pip3 install --upgrade pip
+#installation des requirements
 RUN pip3 install -r requirements.txt
-
-# Copie du fichier de lancement
-COPY startup.sh startup.sh
-
-# Copie du fichier config streamlit
-RUN mkdir -p /.streamlit
-COPY /.streamlit/.secrets /.streamlit/.secrets
-
-# Copie des fichiers applicatifs
-RUN mkdir -p /app
-COPY /app/main.py /app/main.py
-COPY /app/fonctions.py /app/fonctions.py
 
 # On ouvre et expose le port 8501
 EXPOSE 5000
