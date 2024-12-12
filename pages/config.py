@@ -1,5 +1,5 @@
 import streamlit as st
-import toml
+import toml, time
 from ollama import Client
 
 st.title("Configuration technique")
@@ -41,6 +41,8 @@ for secret, display in secrets.items():
     with col2:
         if st.button("Appliquer", key=secret):
             change_secret(secret, val_secret)
+            if secret == "url_llm":
+                time.sleep(1)
             st.rerun()
 
 if test_secret("url_llm"):
