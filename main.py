@@ -7,7 +7,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_community.vectorstores import Pinecone
 from langchain_ollama import OllamaLLM
 from langchain_openai import OpenAIEmbeddings
-
+ 
 def check_variables():
     secret_file = f".streamlit/secrets.toml"
     data = toml.load(secret_file)
