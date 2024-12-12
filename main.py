@@ -18,6 +18,8 @@ def check_variables():
         if val == "N/A":
             tmp = False
             break
+    if "model" not in st.session_state:
+        tmp = False
     return tmp
 
 if check_variables():
