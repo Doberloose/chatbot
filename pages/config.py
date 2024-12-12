@@ -55,7 +55,8 @@ if test_secret("url_llm"):
         # Permet à l'utilisateur de choisir un modèle dans la liste
         model = st.selectbox("Choisissez votre modèle", models)
         if "model" in st.session_state:
-            st.success(f"modele configuré", icon="✅")
+            if st.session_state["model"] != "":
+                st.success(f"modele configuré", icon="✅")
         else:
             st.warning(f"modele a configurer", icon="⚠️")
     with col2:
