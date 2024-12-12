@@ -28,3 +28,13 @@ git push origin master
 export PATH=$PATH:/home/blent/.local/bin
 streamlit run main.py
 pip install -r requirements.txt
+export PATH=$PATH:/home/blent/.local/bin
+streamlit run main.py
+streamlit run main.py
+pip install -r requirements.txt
+streamlit run main.py
+ps -ef
+ps -ef
+streamlit run main.py
+export PATH=$PATH:/home/blent/.local/bin
+streamlit run main.py

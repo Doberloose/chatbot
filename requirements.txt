@@ -1,2 +1,15 @@
-langchain-community==0.3.9
 streamlit==1.40.2
+langchain==0.3.11
+langchain-community==0.3.11
+langchain-core==0.3.24
+langchain-ollama==0.2.1
+langchain-openai==0.2.12
+langchain-text-splitters==0.3.2
+ollama==0.4.4
+openai==1.57.2
+pandas==2.0.2
+pinecone==5.4.2
+pinecone-plugin-inference==3.1.0
+pinecone-plugin-interface==0.0.7
+tiktoken==0.8.0
+tokenizers==0.21.0
