@@ -31,7 +31,7 @@ secrets = {
 for secret, display in secrets.items():
     col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
     with col1:
-        url_llm = st.text_input(display, value="")
+        val_secret = st.text_input(display, value="", type="password")
         if test_secret(secret):
             st.success(f"{display} configuré", icon="✅")
         else:
@@ -39,5 +39,5 @@ for secret, display in secrets.items():
         
     with col2:
         if st.button("Appliquer", key=secret):
-            change_secret(secret, url_llm)
+            change_secret(secret, val_secret)
             st.rerun()
