@@ -13,9 +13,12 @@ def change_secret(prop, val):
         toml.dump(data, f)
 
 
-def get_secret(prop):
+def test_secret(prop):
     data = toml.load(secret_file)
-    return data.get(prop, "N/A")
+    if data.get(prop, "N/A") == "N/A":
+        return False
+    else:
+        return True
 
 
 secrets = {
@@ -29,7 +32,10 @@ for secret, display in secrets.items():
     col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
     with col1:
         url_llm = st.text_input(display, value="")
-        st.text(f"Valeur présente dans la configuration : {get_secret(secret)}")
+        if test_secret(secret):
+            st.success(f"{display} configuré", icon="✅")
+        else:
+            st.warning(f"{display} a configurer", icon="⚠️")
         
     with col2:
         if st.button("Appliquer", key=secret):
