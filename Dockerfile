@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copie du fichier de lancement
-RUN git clone https://github.com/streamlit/streamlit-example.git .
+RUN git clone https://github.com/Doberloose/chatbot.git .
 
 # Mise à jour de pip3
 RUN pip3 install --upgrade pip
