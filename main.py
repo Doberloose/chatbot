@@ -24,8 +24,11 @@ if check_variables():
 
     os.environ["OPENAI_API_KEY"] = st.secrets['open_api_key']
     os.environ["PINECONE_API_KEY"] = st.secrets['pinecone_api_key']
-
-    # TODO : Remplacer par l'URL affichée dans Ngrok
+    
+    # Initialise l'historique des messages s'il n'existe pas dans l'état de la session
+        if "messages" not in st.session_state:
+            st.session_state["messages"] = []
+    
     client = Client(host=st.secrets['url_llm'])
 
     # Définit le titre de l'application web
