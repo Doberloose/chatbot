@@ -4,4 +4,4 @@
 .docker
 .bash*
 .profile
-.git
+.git*
