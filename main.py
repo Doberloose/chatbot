@@ -135,6 +135,6 @@ if check_variables():
             st.session_state["messages"].append({"role": "assistant", "content": message})
 
 else:
-    st.error("La configuration de l'application n'a pas été effectuée\nVeuillez renseigner les données en suivant le lien ci dessous :")
+    st.error("La configuration de l'application n'a pas été effectuée\nVeuillez renseigner les données en cliquant sur le lien ci dessous :")
     st.page_link("pages/config.py", label="configurer")
 

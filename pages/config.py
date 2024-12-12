@@ -58,9 +58,9 @@ if test_secret("url_llm"):
         model = st.selectbox("Choisissez votre modèle", models)
         if "model" in st.session_state:
             if st.session_state["model"] != "":
-                st.success(f"modele configuré", icon="✅")
+                st.success(f"Modele configuré", icon="✅")
         else:
-            st.warning(f"modele a configurer", icon="⚠️")
+            st.warning(f"Modele a configurer", icon="⚠️")
     with col2:
         if st.button("Appliquer", key='model_choice'):
             st.session_state["model"] = model
