@@ -1,4 +1,6 @@
 .cache
 .local
-.streamlit/secret.toml
+.streamlit
 .docker
+.bash*
+.profile
