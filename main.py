@@ -31,20 +31,6 @@ if check_variables():
     # Définit le titre de l'application web
     st.title("Chatbot Ollama")
 
-    # Initialise l'historique des messages s'il n'existe pas dans l'état de la session
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = []
-
-    # Initialise le modèle sélectionné s'il n'existe pas dans l'état de la session
-    if "model" not in st.session_state:
-        st.session_state["model"] = ""
-
-    # Récupère la liste des modèles disponibles auprès d'Ollama
-    models = [model["model"] for model in client.list()["models"]]
-
-    # Permet à l'utilisateur de choisir un modèle dans la liste
-    st.session_state["model"] = st.selectbox("Choisissez votre modèle", models)
-
     historique=''
 
     prompt_template = """
