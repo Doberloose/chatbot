@@ -19,6 +19,8 @@ def check_variables():
             tmp = False
             break
     if "model" not in st.session_state:
+        tmp = False
+    else:
         if st.session_state["model"] != "":
             tmp = False
     return tmp
