@@ -1,5 +1,6 @@
 import streamlit as st
 import toml
+from ollama import Client
 
 st.title("Configuration technique")
 
@@ -42,16 +43,22 @@ for secret, display in secrets.items():
             change_secret(secret, val_secret)
             st.rerun()
 
-col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
-with col1:
-    # Initialise le modèle sélectionné s'il n'existe pas dans l'état de la session
-    if "model" not in st.session_state:
-        st.session_state["model"] = ""
-    # Récupère la liste des modèles disponibles auprès d'Ollama
-    models = [model["model"] for model in client.list()["models"]]
-    # Permet à l'utilisateur de choisir un modèle dans la liste
-    model = st.selectbox("Choisissez votre modèle", models)
-with col2:
-    if st.button("Appliquer", key='model'):
-        st.session_state["model"] = model
-        st.rerun()
+if test_secret("url_llm"):
+    col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
+    with col1:
+        # Initialise le modèle sélectionné s'il n'existe pas dans l'état de la session
+        if "model" not in st.session_state:
+            st.session_state["model"] = ""
+        # Récupère la liste des modèles disponibles auprès d'Ollama
+        client = Client(host=st.secrets['url_llm'])
+        models = [model["model"] for model in client.list()["models"]]
+        # Permet à l'utilisateur de choisir un modèle dans la liste
+        model = st.selectbox("Choisissez votre modèle", models)
+        if "model" in st.session_state:
+            st.success(f"{display} configuré", icon="✅")
+        else:
+            st.warning(f"{display} a configurer", icon="⚠️")
+    with col2:
+        if st.button("Appliquer", key='model_choice'):
+            st.session_state["model"] = model
+            st.rerun()
