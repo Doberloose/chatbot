@@ -1,7 +1,10 @@
 .cache
 .local
 .streamlit
+*secrets.toml
 .docker
 .bash*
 .profile
 .git*
+.ipython
+.streamlit/secrets.toml
