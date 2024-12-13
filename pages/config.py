@@ -2,6 +2,8 @@ import streamlit as st
 import toml, time
 from ollama import Client
 
+st.set_page_config(page_title="Configuration", layout='centered')
+
 st.title("Configuration technique")
 
 secret_file = f".streamlit/secrets.toml"
