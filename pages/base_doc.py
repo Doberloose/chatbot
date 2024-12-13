@@ -111,7 +111,8 @@ st.set_page_config(page_title="Base doc", layout='wide')
 if check_variables():
     col1, col2 = st.columns([1, 2])
     with col1:
-        st.table(data=get_all_metadata_query())
+        st.dataframe(data=get_all_metadata_query(),
+        hide_index=True)
     with col2:
         fic_in = st.file_uploader("Nouveau fichier à charger", type=['pdf'])
         if fic_in:
