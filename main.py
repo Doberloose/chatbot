@@ -80,8 +80,7 @@ if check_variables():
         template=prompt_template,
     )
     llm = OllamaLLM(
-        #model='mistral',
-        model=st.session_state["model"].split(":")[0],
+        model=st.session_state["model"],
         base_url=st.secrets['url_llm']  # or your Ollama server URL
     )
     llm_chain = prompt_in | llm | StrOutputParser()

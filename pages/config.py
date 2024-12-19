@@ -47,6 +47,11 @@ for secret, display in secrets.items():
                 time.sleep(1)
             st.rerun()
 
+
+def format_model(model: str) -> None:
+    return model.split(":")[0]
+
+
 if test_secret("url_llm"):
     col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
     with col1:
@@ -57,7 +62,7 @@ if test_secret("url_llm"):
         client = Client(host=st.secrets['url_llm'])
         models = [model["model"] for model in client.list()["models"]]
         # Permet à l'utilisateur de choisir un modèle dans la liste
-        model = st.selectbox("Choisissez votre modèle", models)
+        model = st.selectbox("Choisissez votre modèle", models, format_func=format_model)
         if "model" in st.session_state:
             if st.session_state["model"] != "":
                 st.success(f"Modele configuré", icon="✅")
