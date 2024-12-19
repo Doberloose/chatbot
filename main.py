@@ -40,40 +40,18 @@ if check_variables():
     client = Client(host=st.secrets['url_llm'])
 
     # Définit le titre de l'application web
-    st.title("Chatbot Ollama")
+    if "model" in st.session_state:
+        model = st.session_state['model'].split(":")[0]
+    else:
+        model = ""
+    col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
+    with col1:
+        st.header(f"Chatbot Ollama ({model})")
+    with col2:
+        if st.button("effacer historique"):
+            st.session_state["messages"] = ''
 
-    historique=''
-
-    prompt_template = """
-    <role>
-    Vous êtes un assistant d'une équipe du département ALM (gestion des actifs / passifs) dans une entreprise en assurance vie.
-    Votre rôle est de répondre à la question entre <question></question> en suivant le contexte entre <contexte></contexte> afin d'assister l'équipe dans le choix des placements à effectuer.
-    Le contexte entre <contexte></contexte> contient des informations extraites de document d'informations clés (DIC). Le DIC est un document harmonisé au niveau européen \n
-    qui permet de retrouver les informations essentielles sur un placement, sa nature et ses caractéristiques principales.
-    Pour Répondre à la question entre <question></question> tu dois absolument suivre les instructions entre <instructions></instructions>.
-    </role>
-
-    <instructions>
-    La REPONSE doit être concise et rédigée en Français. 
-    La REPONSE doit être basée sur le contexte entre <contexte></contexte>.
-    La question entre <question></question> doit être interpretée en fonction de l'historique entre <historique></historique>.
-    Si le contexte entre <contexte></contexte> ne permet pas de répondre à la question entre <question></question>, réponds "Je ne peux pas répondre à votre demande".
-    </instructions>
-
-    <historique>
-    {history}
-    </historique>
-
-    <contexte>
-    {context}
-    </contexte>
-
-    <question>
-    {question}
-    </question>
-
-    REPONSE (La REPONSE doit être concise et rédigée en Français) :::
-    """
+    prompt_template = st.session_state["prompt"]
 
     prompt_in = PromptTemplate(
         input_variables=["history", "context", "question"],
