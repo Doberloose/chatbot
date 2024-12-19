@@ -8,7 +8,6 @@ st.title("Configuration technique")
 
 secret_file = f".streamlit/secrets.toml"
 
-
 def change_secret(prop, val):
     data = toml.load(secret_file)
     data[prop] = val
@@ -58,7 +57,7 @@ def get_promt(model:str) -> str:
         {question}
         </question>
 
-        REPONSE (La REPONSE doit être concise et rédigée en Français) :::
+        REPONSE (La REPONSE doit être concise et rédigée en Français en indiquant la <source>) :::
     """
 
     prompt_llama = """
@@ -92,7 +91,11 @@ def get_promt(model:str) -> str:
         <|eot_id|>
 
         <|begin_of_text|><|start_header_id|>assistant<|end_header_id|>
-        REPONSE (La REPONSE doit être concise et rédigée en Français) :::
+        <instructions>
+        La REPONSE doit être concise et rédigée en Français en indiquant la <source>
+        </instructions>
+        REPONSE :::
+        source : <source>
         <|eot_id|>
     """
 
@@ -125,7 +128,7 @@ def get_promt(model:str) -> str:
         </s>
 
         <|assistant|>
-        REPONSE [INST]La REPONSE doit être concise et rédigée en Français[/INST] :::
+        REPONSE [INST]La REPONSE doit être concise et rédigée en Français en indiquant la <source>[/INST] :::
     """
 
     prompt_model = {

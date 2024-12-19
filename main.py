@@ -1,5 +1,5 @@
 import streamlit as st
-import random, time, os, toml
+import random, time, os, toml, re
 from ollama import Client
 from langchain_core.runnables import RunnablePassthrough 
 from langchain.schema import StrOutputParser
@@ -26,6 +26,38 @@ def check_variables():
             tmp = False
     return tmp
 
+
+# Fonction pour extraire l'ISIN et créer le filtre
+def get_filtre(question):
+    isin_match = re.search(r"[A-Z]{2}[0-9]{1}[0-9A-Z]{9}", question)
+    isin = isin_match.group() if isin_match else ''
+    if isin:
+        return {"isin": {"$eq": isin}}
+    else:
+        return {}
+ 
+
+# Configuration du retriever avec filtre dynamique
+def get_context(input_dict):
+    question = input_dict["question"]
+    filtre = get_filtre(question)
+    return vectorstore_pinecode.similarity_search(
+        question,
+        k=4,
+        filter=filtre
+    )
+
+
+# Définit une fonction générateur pour produire la réponse du modèle par morceaux
+def model_res_generator():
+    hist = st.session_state["messages"]
+    # Démarre un flux de discussion avec le modèle sélectionné et l'historique des messages
+    stream = rag_chain.invoke({"question": prompt, "history": hist})
+    
+    # Produit chaque morceau de la réponse du modèle
+    for chunk in stream:
+        yield chunk
+
 st.set_page_config(page_title="ChatBot", layout='centered')
 
 if check_variables():
@@ -49,7 +81,7 @@ if check_variables():
         st.header(f"Chatbot Ollama ({model})")
     with col2:
         if st.button("effacer historique"):
-            st.session_state["messages"] = ''
+            st.session_state["messages"] = []
 
     prompt_template = st.session_state["prompt"]
 
@@ -68,31 +100,18 @@ if check_variables():
     index_name = "index-rag"
 
     # Créer le vectorstore
-    vectorstore = Pinecone.from_existing_index(
+    vectorstore_pinecode = Pinecone.from_existing_index(
         index_name=index_name,
         embedding=embedding_model_,
         text_key="page_content"
     )
 
-    # Créer le retriever
-    retriever_p = vectorstore.as_retriever(
-        search_type="similarity",
-        search_kwargs={'k': 4}
+
+    # Configuration de la chaîne RAG complète
+    rag_chain = (
+        RunnablePassthrough.assign(context=get_context) | 
+        llm_chain
     )
-
-    rag_chain = RunnablePassthrough.assign(
-        context=lambda x: retriever_p.invoke(x["question"])
-    ) | llm_chain
-
-    # Définit une fonction générateur pour produire la réponse du modèle par morceaux
-    def model_res_generator():
-        hist = st.session_state["messages"]
-        # Démarre un flux de discussion avec le modèle sélectionné et l'historique des messages
-        stream = rag_chain.invoke({"question": prompt, "history": hist})
-    
-        # Produit chaque morceau de la réponse du modèle
-        for chunk in stream:
-            yield chunk
 
     # Affiche l'historique de la discussion des sessions précédentes
     for message in st.session_state["messages"]:
