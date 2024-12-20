@@ -5,26 +5,6 @@ from tqdm.auto import tqdm
 from langchain.embeddings import OpenAIEmbeddings
 
 
-@st.cache_data
-def get_all_metadata_query(batch_size=1000):
-    with st.spinner('Récupération des documents'):
-        pinecone = Pinecone(api_key=st.secrets['pinecone_api_key'])
-        index = pinecone.Index("index-rag")
-
-        all_metadata = []
-        # Query avec un vecteur nul et un filtre vide pour tout récupérer
-        results = index.query(
-            vector=[0] * index.describe_index_stats()['dimension'],  # vecteur nul
-            top_k=batch_size,
-            include_metadata=True,
-            include_values=False  # on ne veut que les métadonnées, pas les vecteurs
-        )
-        for match in results['matches']:
-            if 'metadata' in match:
-                all_metadata.append(match['metadata']['source'])
-        return list(set(all_metadata))
-
-
 def check_variables():
     secret_file = f".streamlit/secrets.toml"
     data = toml.load(secret_file)
@@ -105,26 +85,20 @@ def extract_metadata(text: str):
     return product, isin, risk_level
 
 
-st.set_page_config(page_title="Base doc", layout='wide')
+st.set_page_config(page_title="Traitement PDF", layout='wide')
 
 
-if check_variables():
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        st.dataframe(data=get_all_metadata_query(),
-        hide_index=True)
-    with col2:
-        fic_in = st.file_uploader("Nouveau fichier à charger", type=['pdf'])
-        if fic_in:
-            name_fic_in = fic_in.name
-            product, isin, risk_level, text_pdf = process_file(fic_in)
-            st.markdown(f"**Nom du produit :** {product}")
-            st.markdown(f"**ISIN :** {isin}")
-            st.markdown(f"**Code risque :** {risk_level}")
-            st.markdown(f"**Corps du PDF :**\n{text_pdf}")
-        else:
-            name_fic_in = None
+_, col, _ = st.columns([1, 2, 1])
+with col:
+    st.header(f"Traitement d'un fichier")
 
+fic_in = st.file_uploader("Fichier à traiter", type=['pdf'])
+if fic_in:
+    name_fic_in = fic_in.name
+    product, isin, risk_level, text_pdf = process_file(fic_in)
+    st.markdown(f"**Nom du produit :** {product}")
+    st.markdown(f"**ISIN :** {isin}")
+    st.markdown(f"**Code risque :** {risk_level}")
+    st.markdown(f"**Corps du PDF :**\n{text_pdf}")
 else:
-    st.error("La configuration de pinecone n'a pas été effectuée\nVeuillez renseigner les données en cliquant sur le lien ci dessous :")
-    st.page_link("pages/config.py", label="configurer")
+    name_fic_in = None

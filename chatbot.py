@@ -135,5 +135,5 @@ if check_variables():
 
 else:
     st.error("La configuration de l'application n'a pas été effectuée\nVeuillez renseigner les données en cliquant sur le lien ci dessous :")
-    st.page_link("pages/config.py", label="configurer")
+    st.page_link("pages/configuration.py", label="configurer")
 
