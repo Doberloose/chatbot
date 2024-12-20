@@ -42,10 +42,10 @@ def get_filtre(question):
 def get_context(input_dict):
     question = input_dict["question"]
     if "messages" not in st.session_state:
-        converstation = question
+        conversation = question
     else:
-        converstation = " ".join([message["content"] for message in st.session_state["messages"]]) + question
-    filtre = get_filtre(converstation)
+        conversation = " ".join([message["content"] for message in st.session_state["messages"]]) + question
+    filtre = get_filtre(conversation)
     return vectorstore_pinecode.similarity_search(
         question,
         k=4,
@@ -54,10 +54,10 @@ def get_context(input_dict):
 
 
 # Définit une fonction générateur pour produire la réponse du modèle par morceaux
-def model_res_generator():
+def model_res_generator(prompt_and_isin:str):
     hist = st.session_state["messages"]
     # Démarre un flux de discussion avec le modèle sélectionné et l'historique des messages
-    stream = rag_chain.invoke({"question": prompt, "history": hist})
+    stream = rag_chain.invoke({"question": prompt_and_isin, "history": hist})
     
     # Produit chaque morceau de la réponse du modèle
     for chunk in stream:
@@ -136,7 +136,12 @@ if check_variables():
 
         # Affiche la réponse de l'assistant dans la discussion
         with st.chat_message("assistant"):
-            message = st.write_stream(model_res_generator())
+            if "messages" not in st.session_state:
+                conversation = prompt
+            else:
+                conversation = " ".join([message["content"] for message in st.session_state["messages"]]) + prompt
+            prompt_and_isin = f"{get_filtre(conversation)} {prompt}"
+            message = st.write_stream(model_res_generator(prompt_and_isin))
             st.session_state["messages"].append({"role": "assistant", "content": message})
 
 else:
