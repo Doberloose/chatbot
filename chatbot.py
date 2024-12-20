@@ -37,10 +37,15 @@ def get_filtre(question):
         return {}
  
 
+
 # Configuration du retriever avec filtre dynamique
 def get_context(input_dict):
     question = input_dict["question"]
-    filtre = get_filtre(question)
+    if "messages" not in st.session_state:
+        converstation = question
+    else:
+        converstation = " ".join([message["content"] for message in st.session_state["messages"]]) + question
+    filtre = get_filtre(converstation)
     return vectorstore_pinecode.similarity_search(
         question,
         k=4,
@@ -59,6 +64,7 @@ def model_res_generator():
         yield chunk
 
 st.set_page_config(page_title="ChatBot", layout='centered')
+
 
 if check_variables():
 

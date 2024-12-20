@@ -41,7 +41,7 @@ def get_promt(model:str) -> str:
         <instructions>
         La REPONSE doit être concise et rédigée en Français. 
         La REPONSE doit être basée sur le contexte entre <contexte></contexte>.
-        La question entre <question></question> doit être interpretée en fonction de l'historique entre <historique></historique>.
+        La REPONSE doit être basée sur l'historique entre <historique></historique>.
         Si le contexte entre <contexte></contexte> ne permet pas de répondre à la question entre <question></question>, réponds "Je ne peux pas répondre à votre demande".
         </instructions>
 
@@ -71,7 +71,7 @@ def get_promt(model:str) -> str:
         <instructions>
         La REPONSE doit être concise et rédigée en Français. 
         La REPONSE doit être basée sur le contexte entre <contexte></contexte>.
-        La question entre <question></question> doit être interpretée en fonction de l'historique entre <historique></historique>.
+        La REPONSE doit être basée sur l'historique entre <historique></historique>.
         Si le contexte entre <contexte></contexte> ne permet pas de répondre à la question entre <question></question>, réponds "Je ne peux pas répondre à votre demande".
         </instructions>
 
@@ -109,7 +109,7 @@ def get_promt(model:str) -> str:
 
         [INST]La REPONSE doit être concise et rédigée en Français.[/INST]
         [INST]La REPONSE doit être basée sur le contexte entre <contexte></contexte>.[/INST]
-        [INST]La question entre <question></question> doit être interpretée en fonction de l'historique entre <historique></historique>.[/INST]
+        [INST]La REPONSE doit être basée sur l'historique entre <historique></historique>.[/INST]
         [INST]Si le contexte entre <contexte></contexte> ne permet pas de répondre à la question entre <question></question>, réponds "Je ne peux pas répondre à votre demande".[/INST]
 
         <historique>
