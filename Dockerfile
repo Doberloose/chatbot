@@ -19,4 +19,4 @@ RUN pip3 install -r requirements.txt
 # On ouvre et expose le port 8501
 EXPOSE 5000
 
-ENTRYPOINT ["streamlit", "run", "/app/main.py", "--server.port=5000", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "/app/chatbot.py", "--server.port=5000", "--server.address=0.0.0.0"]
